@@ -1,0 +1,5 @@
+@import "flowbite";
+
+@tailwind components;
+@tailwind utilities;
+@tailwind base;
