@@ -1,18 +1,12 @@
-const Profile = ({ avatar, username, bio, onAdd , onLogout }) => {
-  let items = [
-    "item1",
-    "item2",
-    "item3",
-    "item4",
-    "item5",
-    "item3",
-    "item4",
-    "item5"
-  ];
+import auth from "../../../api/auth";
+
+const Profile = ({ user }) => {
+  let items = ["item1", "item2", "item3", "item4"];
+
   return (
     <li
-      style={{ height: "92vh", width: "40%" }}
-      className="w-full border bg-gray-50 flex flex-col items-center gap-3 px-4"
+      style={{ height: "100vh", width: "20rem" }}
+      className="w-full border bg-gray-50 flex flex-col items-center gap-3 px-4 justify-between shadow"
     >
       <div className="p-3 flex items-center">
         <span
@@ -36,22 +30,22 @@ const Profile = ({ avatar, username, bio, onAdd , onLogout }) => {
         />
       </div>
       <img
-        src={avatar || "avatar.png"}
+        src={user.image || "avatar.png"}
         alt="Avatar"
         className="image rounded-full"
         style={{ width: "5rem", height: "5rem" }}
       />
       <p className="font-bold text-lg text-blue-600">
-        {username || "Username"}
+        {user.username || "Username"}
       </p>
       <p className="text-center text-sm">
-        {bio ||
+        {user.bio ||
           "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse, exercitationem!"}
       </p>
       <div className="w-full flex flex-col items-center p-1 border rounded overflow-y-scroll">
         <ul className="flex flex-col w-full gap-3 p-2">
-          {items.map((item) => (
-            <li key={item} className="border rounded p-1 flex gap-3">
+          {items.map((item, index) => (
+            <li key={index} className="border rounded p-1 flex gap-3 bg-white">
               <img
                 src={item.img || "avatar.png"}
                 alt="item"
@@ -77,14 +71,11 @@ const Profile = ({ avatar, username, bio, onAdd , onLogout }) => {
         </ul>
       </div>
       <button
-        onClick={onAdd}
-        className="bg-indigo-600 transition-all text-white w-full mt-1 mx-2 p-2 rounded text-sm hover:bg-blue-800"
-      >
-        Add to Friends
-      </button>
-      <button
-        onClick={onLogout}
-        className="bg-red-600 transition-all text-white w-full mb-2 mx-2 p-2 rounded text-sm hover:bg-red-800"
+        onClick={() => {
+          auth.removeToken();
+          window.location = "/register";
+        }}
+        className="bg-red-600 transition-all text-white w-full mx-2 mb-3 p-2 rounded text-sm hover:bg-red-800"
       >
         Logout
       </button>

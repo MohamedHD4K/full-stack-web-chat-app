@@ -20,7 +20,7 @@ const Input = ({
         id={id}
         value={value}
         onChange={onChange}
-        className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        className="mt-1 block w-full rounded-md border border-gray-300 shadow focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         {...props}
       />
     </div>

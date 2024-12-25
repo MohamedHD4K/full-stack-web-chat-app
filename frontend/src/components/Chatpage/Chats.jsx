@@ -4,7 +4,7 @@ import Top from "./Top";
 
 const Chats = () => {
   return (
-    <li style={{ height: "92vh", width: "100%" }} className="w-full flex flex-col justify-between">
+    <li className="flex flex-col justify-between w-full ">
       <Top />
       <Middle />
       <Bottom />

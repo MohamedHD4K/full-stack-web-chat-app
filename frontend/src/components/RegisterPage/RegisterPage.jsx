@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../Input";
 import { Link } from "react-router-dom";
+import UserAuth from "../../../api/userAuth";
 
 function Register() {
   const [value, setValue] = useState({
@@ -8,30 +9,45 @@ function Register() {
     password: "",
     phone: "",
     email: "",
-    image: "",
+    image: ""
   });
 
-  const handelChanges = ({ target }) => {
+  const handleChanges = ({ target }) => {
     setValue({ ...value, [target.id]: target.value });
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await UserAuth.post_user(value);
+      console.log("Response :", response  );
+      console.log("Data :", value  );
+      window.location = "/login"
+    } catch (error) {
+      console.log("Error :", error);
+    }
+  };
+
+  useEffect(() => {
+    document.title = "Register";
+  }, []);
+
   return (
     <div
-      style={{ height: "92vh" }}
-      className="flex min-h-screen items-center justify-center bg-gray-100"
+      className="flex min-h-screen w-full items-center justify-center bg-gray-100"
     >
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
         <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
           Register
         </h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           {/* Username */}
           <Input
             type="text"
             placeholder="Enter your username"
             id="username"
             value={value.username}
-            onChange={handelChanges}
+            onChange={handleChanges}
             title="Username"
           />
           {/* Email */}
@@ -40,7 +56,7 @@ function Register() {
             placeholder="Enter your email"
             id="email"
             value={value.email}
-            onChange={handelChanges}
+            onChange={handleChanges}
             title="Email"
           />
           {/* Password */}
@@ -49,7 +65,7 @@ function Register() {
             placeholder="Enter your password"
             id="password"
             value={value.password}
-            onChange={handelChanges}
+            onChange={handleChanges}
             title="Password"
           />
           {/* Phone Number */}
@@ -58,8 +74,17 @@ function Register() {
             placeholder="Enter your phone number"
             id="phone"
             value={value.phone}
-            onChange={handelChanges}
+            onChange={handleChanges}
             title="Phone number"
+          />
+            {/* Image */}
+            <Input
+            type="url"
+            placeholder="Enter your Avatar image"
+            id="image"
+            value={value.image}
+            onChange={handleChanges}
+            title="Avatar Image"
           />
           {/* Submit Button */}
           <button

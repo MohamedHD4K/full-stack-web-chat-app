@@ -24,4 +24,13 @@ width: .5rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+} 
+
+::selection{
+  background-color: transparent;
+}
+
+input::selection{
+  background-color: blueviolet;
+  color: #fff;
 }

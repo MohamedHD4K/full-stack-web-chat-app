@@ -1,6 +1,6 @@
 const Bottom = ({onSend , onImoje , onUploade}) => {
   return (
-    <div className="p-3 border-t">
+    <div className="p-3 border-t  bg-gray-50">
       <div className="p-3 flex items-center">
         <span
           style={{
@@ -29,7 +29,8 @@ const Bottom = ({onSend , onImoje , onUploade}) => {
         >
           attach_file
         </span>
-        <span onClick={onSend} className="material-symbols-outlined transition-all text-white p-2 bg-blue-700 ml-3 rounded-full hover:bg-blue-800 cursor-pointer">
+        <span onClick={onSend} className="material-symbols-outlined transition-all text-white p-1 bg-blue-700 ml-3
+        text-xl px-2 rounded-full hover:bg-blue-800 cursor-pointer">
           send
         </span>
       </div>

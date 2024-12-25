@@ -1,6 +1,6 @@
 const Top = ({ image, username }) => {
   return (
-    <div className="p-3 border-b flex gap-4">
+    <div className="p-3 border-b flex gap-4 shadow  bg-gray-50">
       <div>
         <img
           src={image || "avatar.png"}

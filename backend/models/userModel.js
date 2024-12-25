@@ -22,12 +22,12 @@ const UserSchema = new mongoose.Schema({
     max: 200,
   },
   phone: {
-    type: Number,
+    type: String,
     required: true,
     min: 11,
     max: 12,
   },
-  img: {
+  image: {
     type: String,
     required: false,
   },
@@ -41,16 +41,16 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.pre("save", async function (next) {
   const salt = bcryptjs.genSaltSync(10);
-  const hashed = bcryptjs.hashSync(UserSchema.password, salt);
+  const hashed = bcryptjs.hashSync(this.password, salt);
   this.password = hashed;
   next();
 });
 
-UserSchema.method.getAuthToken = () => {
-  return jwt.sign(this.JSON(), process.env.JWT_SECRET);
+UserSchema.methods.getAuthToken = function () {
+  return jwt.sign(this.toJSON(), process.env.JWT_SECRET);
 };
 
-UserSchema.method.checkPassword = (password) => {
+UserSchema.methods.checkPassword = async function (password) {
   return bcryptjs.compare(password, this.password);
 };
 

@@ -1,14 +1,32 @@
+import { useEffect, useState } from "react";
 import ListItem from "../ListItem";
+import UserAuth from "../../../api/userAuth";
 
-const Connetions = () => {
-  const list = ["item1", "item2", "item3", "item4" , "item1", "item2", "item3", "item4"];
+const Connetions = ({ user, handleShowUser }) => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  let currentUser = user;
+
+  useEffect(() => {
+    try {
+      const response = UserAuth.get_users();
+      response.then((res) => {
+        setUsers(res.data);
+        setLoading(true);
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   return (
     <li
-      style={{ width: "40%" }}
-      className="w-full border bg-gray-50"
+      style={{ height: "100vh", width: "20rem" }}
+      className="w-full border bg-gray-50 shadow"
     >
-      <ListItem user="user" />
+      <ListItem type="user" username={user.username} user={user} />
       <div className="p-3 flex items-center">
         <span
           style={{
@@ -29,15 +47,37 @@ const Connetions = () => {
           placeholder="Search Here..."
           className="grow text-sm rounded-r-full border border-gray-300 transition-all"
         />
+        <button
+          className="material-symbols-outlined ml-2 text-white text-sm bg-blue-700 p-1 px-2
+        hover:bg-blue-800 transition-all rounded"
+          style={{ bottom: "1rem", right: "2rem" }}
+        >
+          add
+        </button>
       </div>
-
-      <ul style={{ height: "73vh" }} className="overflow-y-scroll">
+      <ul style={{ height: "81vh" }} className="overflow-y-scroll">
         <hr />
-        {list.map((item, index) => (
-          <li className="border-b-2" key={item}>
-            <ListItem username={item} alert={index} />
-          </li>
-        ))}
+        {loading ? (
+          users.map((user, index) => (
+            <li className="border-b-2 bg-white" key={user._id}>
+              <ListItem
+                user={user}
+                username={
+                  user.username === currentUser.username ? "You" : user.username
+                }
+                alert={index}
+                onClick={handleShowUser}
+              />
+            </li>
+          ))
+        ) : (
+          <div
+            className="flex justify-center items-center text-2xl font-bold"
+            style={{ height: "80vh" }}
+          >
+            Loading...
+          </div>
+        )}
       </ul>
     </li>
   );
