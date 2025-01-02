@@ -19,7 +19,7 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 
-  socket.on("message", async ({ senderId, receiverId, text }) => {
+  socket.on("message", async ({ senderId, receiverId, text , url }) => {
     try {
       let conversation = await Conversation.findOne({
         participants: { $all: [senderId, receiverId] },
@@ -33,9 +33,10 @@ io.on("connection", (socket) => {
       }
 
 
-      const newMessage = { sender: senderId, text , hasSeen:false };
+      const newMessage = { sender: senderId, text , url };
       conversation.messages.push(newMessage);
       await conversation.save();
+      console.log(url);
 
       io.to(receiverId).emit("message", newMessage);
     } catch (error) {

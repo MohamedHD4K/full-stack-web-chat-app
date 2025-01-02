@@ -38,7 +38,9 @@ const Middle = ({ messages, user, selectedUser }) => {
           >
             <div>
               <p
-                className={`inline-block text text-sm p-3 rounded-xl ${
+                className={`inline-block text text-sm ${
+                  message.url === false ? "p-2" : "p-3"
+                }  rounded-xl ${
                   message.sender === user._id
                     ? "bg-gray-300 text-black dark:bg-gray-700 dark:text-white"
                     : "bg-gray-500 text-white dark:bg-gray-900"
@@ -51,7 +53,15 @@ const Middle = ({ messages, user, selectedUser }) => {
                     message.sender !== user._id ? "0" : "16px"
                 }}
               >
-                {message.text || "No content"}
+                {message.url === false ? (
+                  <img
+                    className="image rounded-lg"
+                    ref={containerRef}
+                    src={message.text}
+                  />
+                ) : (
+                  message.text
+                )}
               </p>
               <p
                 style={{ fontSize: "11px" }}

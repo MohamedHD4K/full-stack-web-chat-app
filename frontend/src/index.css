@@ -43,8 +43,15 @@ input::selection {
   }
 }
 
-.text{
+.text {
   word-wrap: break-word;
-  overflow-wrap: break-word; 
-  white-space: pre-wrap; 
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+.bg-image {
+  background: url("background.jpg");
+}
+
+.bg-image-dark {
+  background: url("background-dark.jpg");
 }

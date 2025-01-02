@@ -11,13 +11,15 @@ const socket = io("http://localhost:3000");
 const Chats = ({ selectedUser, onOpen }) => {
   const { user } = useContext(UserContext);
   const [messages, setMessages] = useState([]);
+  const [type, setSype] = useState(true);
   const [message, setMessage] = useState({
     senderId: user._id,
     receiverId: selectedUser?._id || "",
-    text: ""
+    text: "",
+    url:type
   });
-
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
     if (message.text.trim()) {
       const newMessage = { ...message };
 
@@ -40,10 +42,11 @@ const Chats = ({ selectedUser, onOpen }) => {
     setMessage({
       senderId: user._id,
       receiverId: selectedUser._id,
-      text: target.value
+      text: target.value,
+      url : type
     });
   };
-
+console.log(type);
   useEffect(() => {
     if (selectedUser) {
       socket.emit("join", {
@@ -62,34 +65,26 @@ const Chats = ({ selectedUser, onOpen }) => {
   }, [selectedUser, user._id]);
 
   useEffect(() => {
-    socket.on("message", (data) => {
-      setMessages((prev) => [...prev, data]);
-    });
-
-    return () => {
-      socket.off("message");
-    };
-  }, []);
-
-  useEffect(() => {
     ConversationAuth.get_conversation({
       senderId: user._id,
       receiverId: selectedUser._id
     })
       .then((res) => setMessages(res.data))
       .catch((err) => console.error("Error fetching conversations:", err));
-  }, [messages, selectedUser._id, user._id]);
+  }, [message, selectedUser._id, user._id]);
 
   return (
     <li
-      className="flex flex-col justify-between w-full"
+      className=" flex flex-col justify-between w-full"
       style={{ maxHeight: "100vh" }}
     >
       <Top user={selectedUser} onOpen={onOpen} />
       <Middle user={user} selectedUser={selectedUser} messages={messages} />
       <Bottom
+        onUploade={() => setSype(prev => !prev)}
         onChange={handleChanges}
         message={message}
+        type={type}
         onSend={handleSendMessage}
       />
     </li>

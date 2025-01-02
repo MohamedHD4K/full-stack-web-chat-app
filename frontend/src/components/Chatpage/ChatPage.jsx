@@ -25,10 +25,12 @@ const ChatPage = () => {
     <ul className="flex w-full dark:bg-gray-900">
       <Connetions user={user} handleShowUser={handleShowUser} />
       {selectedUser ? (
-        <Chats selectedUser={selectedUser} onOpen={handleOpen} />
+        <Chats className="" selectedUser={selectedUser} onOpen={handleOpen} />
       ) : (
-        <div className="w-full flex justify-center items-center text-xl font-medium dark:text-white">
-          Select User to start chat
+        <div
+          className="flex justify-center items-center w-full text-2xl font-bold text-gray-800 dark:text-gray-300"
+        >
+          select user to start chatting
         </div>
       )}
       {(selectedUser && open) && <Profile user={selectedUser} />}

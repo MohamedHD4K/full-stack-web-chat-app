@@ -1,7 +1,7 @@
-const Bottom = ({ onSend, onImoje, onUploade, onChange, message }) => {
+const Bottom = ({ onSend, onImoje, onUploade , type , onChange, message }) => {
   return (
     <div className="p-3 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-      <div className="p-2 flex items-center">
+      <form onSubmit={onSend} className="p-2 flex items-center">
         <span
           style={{
             borderTopLeftRadius: "10px",
@@ -16,9 +16,9 @@ const Bottom = ({ onSend, onImoje, onUploade, onChange, message }) => {
         </span>
         <input
           onChange={onChange}
-          type="text"
+          type={type ? "text" : "url"}
           value={message.text}
-          placeholder="Search Here..."
+          placeholder={type ? "type message..." : "type URL..."}
           className="grow text-sm rounded-r-full border no-border dark:bg-gray-800 border-indigo-800 dark:border-gray-600
            dark:text-white p-2.5 transition-all"
         />
@@ -34,14 +34,13 @@ const Bottom = ({ onSend, onImoje, onUploade, onChange, message }) => {
         >
           attach_file
         </span>
-        <span
-          onClick={onSend}
+        <button
           className="material-symbols-outlined transition-all text-white p-1 bg-gray-700 ml-3
           text-xl px-2 rounded-xl hover:bg-gray-800 cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600 "
         >
           send
-        </span>
-      </div>
+        </button>
+      </form>
     </div>
   );
 };
