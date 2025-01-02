@@ -1,10 +1,15 @@
-import User from "../models/userModel.js";
+import User from "../models/user.model.js";
 
 const post_user = async (req, res) => {
   const { username, password, phone, email, image } = req.body;
   try {
     let user = await User.findOne({ username });
     if (user) return res.status(400).send("the username or password wrong");
+
+    if (!username) return res.status(400).send("The username is required");
+    if (!email) return res.status(400).send("The email is required");
+    if (!password) return res.status(400).send("The password is required");
+    if (!phone) return res.status(400).send("The phone number is required");
 
     user = new User({ username, password, phone, email, image });
     await user.save();
@@ -13,7 +18,7 @@ const post_user = async (req, res) => {
       "x-token-auth": user.getAuthToken()
     });
   } catch (error) {
-    console.log("Error :", error);
+    res.status(400).send(error.message)
   }
 };
 
@@ -50,6 +55,37 @@ const get_users = async (req, res) => {
   }
 };
 
-const UserAuth = { get_users, post_user, post_auth };
+const put_user = async (req, res) => {
+  const { id, username, email, bio, image, phone } = req.body;
+  try {
+    const user = await User.findOneAndUpdate(
+      { _id: id },
+      { username, email, bio, image, phone },
+      {
+        new: true,
+        upsert: true
+      }
+    );
+    console.log(user);
+    return res.send(user);
+  } catch (error) {
+    console.log(error);
+    return res.send("There is sonething is wrong");
+  }
+};
+
+const delete_user = async (req, res) => {
+  const { id } = req.params;
+  console.log(req.body);
+  try {
+    const user = await User.findOneAndDelete({ _id: id });
+    console.log("Deleted", user);
+    return res.send("Deleted");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const UserAuth = { get_users, post_user, post_auth, put_user, delete_user };
 
 export default UserAuth;

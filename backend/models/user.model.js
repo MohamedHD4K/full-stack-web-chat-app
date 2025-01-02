@@ -51,7 +51,7 @@ UserSchema.methods.getAuthToken = function () {
 };
 
 UserSchema.methods.checkPassword = async function (password) {
-  return bcryptjs.compare(password, this.password);
+  return bcryptjs.compare(password, this.password)
 };
 
 const User = mongoose.model("User", UserSchema);

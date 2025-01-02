@@ -1,63 +1,81 @@
-const Middle = ({ avatar }) => {
-  let content = [
-    "about",
-    "content",
-    "user data user",
-    "Lorem ipsum dolor sit ",
-    "user data user",
-    "about",
-    "content",
-    "user data user",
-    "Lorem ipsum dolor ",
-    "user data user"
-  ];
+import { useEffect, useRef } from "react";
+
+const Middle = ({ messages, user, selectedUser }) => {
+  const containerRef = useRef(null);
+
+  const scrollToBottom = () => {
+    if (containerRef.current) {
+      const { lastElementChild } = containerRef.current;
+      if (lastElementChild) {
+        lastElementChild.scrollIntoView();
+      }
+    }
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
     <div
-      className="p-3 flex flex-col gap-3 overflow-y-scroll"
-      style={{ maxHeight: "78vh" }}
+      className="p-3 flex flex-col gap-2 overflow-y-scroll dark:bg-gray-800"
+      style={{ height: "80vh" }}
     >
-      {content.map((item, index) => (
+      {messages.length === 0 ? (
         <div
-          key={index}
-          className={`flex ${
-            item !== "user data user" ? "justify-start" : "justify-end"
-          }`}
+          className="flex justify-center items-center text-2xl font-bold text-gray-800 dark:text-gray-300"
+          style={{ height: "80vh" }}
         >
-          <div>
-            <p
-              className={`inline-block text-sm p-3 rounded-xl ${
-                item !== "user data user"
-                  ? "bg-gray-300 text-black"
-                  : "bg-indigo-500 text-white"
-              }`}
-              style={
-                item !== "user data user"
-                  ? { maxWidth: "400px", borderTopLeftRadius: "0" }
-                  : { maxWidth: "400px", borderTopRightRadius: "0" }
-              }
-            >
-              {item || "content"}
-            </p>
-            <p
-              style={{ fontSize: "11px" }}
-              className={`font-medium ${
-                item !== "user data user" && "flex justify-end"
-              }`}
-            >
-              10:35AM
-            </p>
-          </div>
-          {item === "user data user" && (
-            <img
-              src={avatar || "avatar.png"}
-              alt="avatar"
-              className="image rounded-full ml-2"
-              style={{ width: "2rem", height: "2rem" }}
-            />
-          )}
+          No messages yet.
         </div>
-      ))}
+      ) : (
+        messages[0]?.messages?.map((message, index) => (
+          <div
+            ref={containerRef}
+            key={index}
+            className={`flex ${
+              message.sender === user._id ? "justify-start" : "justify-end"
+            }`}
+          >
+            <div>
+              <p
+                className={`inline-block text text-sm p-3 rounded-xl ${
+                  message.sender === user._id
+                    ? "bg-gray-300 text-black dark:bg-gray-700 dark:text-white"
+                    : "bg-gray-500 text-white dark:bg-gray-900"
+                }`}
+                style={{
+                  maxWidth: "400px",
+                  borderTopLeftRadius:
+                    message.sender === user._id ? "0" : "16px",
+                  borderTopRightRadius:
+                    message.sender !== user._id ? "0" : "16px"
+                }}
+              >
+                {message.text || "No content"}
+              </p>
+              <p
+                style={{ fontSize: "11px" }}
+                className={`font-medium dark:text-gray-400 ${
+                  message.sender === user._id ? "text-right" : "text-left"
+                }`}
+              >
+                {new Date(message.timestamp).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit"
+                })}
+              </p>
+            </div>
+            {message.sender !== user._id && (
+              <img
+                src={selectedUser.image || "avatar.png"}
+                alt="avatar"
+                className="image rounded-full ml-2"
+                style={{ width: "2rem", height: "2rem" }}
+              />
+            )}
+          </div>
+        ))
+      )}
     </div>
   );
 };

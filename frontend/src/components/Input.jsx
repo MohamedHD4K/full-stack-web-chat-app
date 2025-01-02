@@ -5,12 +5,14 @@ const Input = ({
   id,
   value,
   onChange,
-  ...props
 }) => {
   return (
     <div className="mb-4">
       {title && (
-        <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor={id}
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+        >
           {title}
         </label>
       )}
@@ -20,8 +22,10 @@ const Input = ({
         id={id}
         value={value}
         onChange={onChange}
-        className="mt-1 block w-full rounded-md border border-gray-300 shadow focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-        {...props}
+        className="mt-1 block w-full rounded-md border border-gray-300 shadow-lg
+        focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm 
+        bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-200 
+        dark:border-gray-600 dark:placeholder-gray-400 dark:focus:border-indigo-400 dark:focus:ring-indigo-400"
       />
     </div>
   );

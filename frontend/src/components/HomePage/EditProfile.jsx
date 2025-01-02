@@ -1,36 +1,50 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Input from "../Input";
+import UserAuth from "../../../api/user.auth";
+import UserContext from "../../contexts/UserContext";
+import { ToastContainer, toast } from "react-toastify";
 
-const EditProfile = ({ user }) => {
-  const [loading, setLoading] = useState(false);
+const EditProfile = () => {
+  const { user, setUser } = useContext(UserContext);
   const [value, setValue] = useState({
     username: "",
     bio: "",
     email: "",
-    image: ""
+    image: "",
+    phone: "",
+    id: ""
   });
 
   const handleChanges = ({ target }) => {
     setValue({ ...value, [target.id]: target.value });
   };
 
-  const handleEdit = () => {};
-
   useEffect(() => {
-    !user ? setLoading(true) : setLoading(false);
     user &&
       setValue({
         username: user.username,
         bio: user.bio,
         email: user.email,
-        image: user.image
+        image: user.image,
+        phone: user.phone,
+        id: user._id
       });
   }, [user]);
 
+  const handleUpdate = async () => {
+    try {
+      let response = await UserAuth.put_user(value);
+      setUser(response.data);
+      toast.success("Updated")
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
+
   return (
     <div
-      style={{ width:"40%"}}
-      className="border  p-4 m-4 flex flex-col gap-3 rounded-lg shadow-md bg-white"
+      style={{ width: "40%" }}
+      className="border p-4 m-4 flex flex-col gap-3 rounded-lg shadow-md bg-white dark:bg-gray-800 dark:border-gray-700"
     >
       <div className="flex flex-col gap-3">
         <img
@@ -40,7 +54,8 @@ const EditProfile = ({ user }) => {
           style={{ width: "10rem", height: "10rem" }}
         />
         <p
-          className="p-1 text-sm px-4 shadow-lg rounded-full mx-auto border border-gray-800  bg-white"
+          className="p-1 text-sm px-4 shadow-lg rounded-full mx-auto border
+          border-gray-800 bg-white dark:bg-gray-900 dark:text-white"
           style={{ transform: "translateY(-30px)" }}
         >
           {value.username || "Username"}
@@ -55,6 +70,7 @@ const EditProfile = ({ user }) => {
             id="username"
             placeholder="Enter New Username"
             value={value.username}
+            className="dark:bg-gray-900 dark:border-gray-600 dark:text-white"
           />
           <Input
             type="text"
@@ -63,6 +79,7 @@ const EditProfile = ({ user }) => {
             title="Bio"
             placeholder="Enter New Bio"
             value={value.bio}
+            className="dark:bg-gray-900 dark:border-gray-600 dark:text-white"
           />
           <Input
             type="email"
@@ -71,23 +88,36 @@ const EditProfile = ({ user }) => {
             title="Email"
             placeholder="Enter New Email"
             value={value.email}
+            className="dark:bg-gray-900 dark:border-gray-600 dark:text-white"
           />
           <Input
-            type="Url"
+            type="url"
             onChange={handleChanges}
             id="image"
             title="Image"
             placeholder="Enter New Image"
             value={value.image}
+            className="dark:bg-gray-900 dark:border-gray-600 dark:text-white"
+          />
+          <Input
+            type="number"
+            onChange={handleChanges}
+            id="phone"
+            title="Phone Number"
+            placeholder="Enter New Phone Number"
+            value={value.phone}
+            className="dark:bg-gray-900 dark:border-gray-600 dark:text-white"
           />
         </div>
         <button
-          onClick={handleEdit}
-          className="bg-indigo-600 text-white p-2 px-4 rounded transition-all hover:bg-blue-900"
+          onClick={handleUpdate}
+          className="bg-indigo-600 text-white p-2 px-4 rounded transition-all hover:bg-blue-900 dark:bg-indigo-800
+           dark:hover:bg-indigo-700"
         >
           Edit Profile
         </button>
       </div>
+      <ToastContainer />
     </div>
   );
 };

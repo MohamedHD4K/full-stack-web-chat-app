@@ -23,7 +23,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="flex justify-center gap-5 w-full relative bg-gray-100">
+    <div className="flex justify-center gap-5 w-full relative bg-gray-100 dark:bg-gray-900">
       <EditProfile
         user={user}
         onChange={handelChanges}
